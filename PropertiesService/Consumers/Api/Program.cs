@@ -1,12 +1,16 @@
 using Api.Extensions;
+using NLog;
+
 
 var builder = WebApplication.CreateBuilder(args);
+LogManager.LoadConfiguration("nlog.config");
 
 // Add services to the container.
 
 builder.Services.AddControllers();
 builder.ConfigureAppDbContext();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
+builder.LoadDependencies();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 

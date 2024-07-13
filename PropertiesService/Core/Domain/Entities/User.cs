@@ -13,4 +13,5 @@ public class User
     public string Password { get; set; }
     public string Name { get; set; }
     public string Nickname { get; set; }
+    public DateTime CreatedAt { get; private set; } = DateTime.Now;
 }

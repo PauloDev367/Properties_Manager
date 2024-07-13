@@ -18,6 +18,5 @@ public class Property
     public int TotalParkings { get; set; }
     public List<Image> Images { get; set; }
     public string MainPhoto { get; set; }
-
-
+    public DateTime CreatedAt { get; private set; } = DateTime.Now;
 }

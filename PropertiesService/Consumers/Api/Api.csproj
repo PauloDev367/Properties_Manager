@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Adapters\DataEF\DataEF.csproj" />
+    <ProjectReference Include="..\..\Adapters\NLog\LogNLog\LogNLog.csproj" />
   </ItemGroup>
 
 </Project>
