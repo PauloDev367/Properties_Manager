@@ -8,9 +8,14 @@ LogManager.LoadConfiguration("nlog.config");
 // Add services to the container.
 
 builder.Services.AddControllers();
-builder.ConfigureAppDbContext();
 
+
+builder.ConfigureAppDbContext();
 builder.LoadDependencies();
+builder.ConfigureAppAuth();
+
+
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -25,6 +30,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

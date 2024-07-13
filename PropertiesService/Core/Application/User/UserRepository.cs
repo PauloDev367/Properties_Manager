@@ -1,9 +1,9 @@
 ﻿using Application.DTO.Request.Auth;
-using Application.DTO.Result.Auth;
+using Application.DTO.Response.Auth;
 using DataEF;
 using Domain.Ports;
 using Domain.Ports.DTO.Request;
-using Domain.Ports.DTO.Result;
+using Domain.Ports.DTO.Response;
 
 namespace Application.User;
 

@@ -1,6 +1,6 @@
-﻿using Domain.Ports.DTO.Result;
+﻿using Domain.Ports.DTO.Response;
 
-namespace Application.DTO.Result.Auth;
+namespace Application.DTO.Response.Auth;
 
 public class CreatedUserDto : ICreatedUserDto
 {
