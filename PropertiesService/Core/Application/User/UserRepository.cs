@@ -1,9 +1,6 @@
-﻿using Application.DTO.Request.Auth;
-using Application.DTO.Response.Auth;
-using DataEF;
+﻿using DataEF;
 using Domain.Ports;
-using Domain.Ports.DTO.Request;
-using Domain.Ports.DTO.Response;
+
 
 namespace Application.User;
 
@@ -16,20 +13,20 @@ public class UserRepository : IUserRepository
         _appDbContext = appDbContext;
     }
 
-    public async Task<ICreatedUserDto> CreateAsync(ICreateUserDto register, string passwordHash)
+    public async Task<Domain.Entities.User> CreateAsync(Domain.Entities.User register)
     {
         var user = new Domain.Entities.User
         {
             Email = register.Email,
             Name = register.Name,
             Nickname = register.Nickname,
-            Password = passwordHash
+            Password = register.Password
         };
 
         await _appDbContext.Users.AddAsync(user);
         await _appDbContext.SaveChangesAsync();
 
-        return new CreatedUserDto().FromUser(user);
+        return user;
     }
 
     public Task<List<Domain.Entities.User>> GetAllAsync()

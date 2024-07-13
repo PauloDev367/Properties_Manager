@@ -1,15 +1,14 @@
-﻿using Domain.Ports.DTO.Response;
-
+﻿
 namespace Application.DTO.Response.Auth;
 
-public class CreatedUserDto : ICreatedUserDto
+public class CreatedUserDto
 {
     public Guid Id { get; set; }
     public string Email { get; set; }
     public string Name { get; set; }
     public string Nickname { get; set; }
     public DateTime CreatedAt { get; set; }
-    public ICreatedUserDto FromUser(Domain.Entities.User user)
+    public CreatedUserDto FromUser(Domain.Entities.User user)
     {
         return new CreatedUserDto
         {

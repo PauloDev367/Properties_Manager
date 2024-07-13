@@ -1,9 +1,8 @@
-﻿using Domain.Ports.DTO.Request;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Application.DTO.Request.Auth;
 
-public class CreateUserDto : ICreateUserDto
+public class CreateUserDto
 {
     [Required]
     [EmailAddress]

@@ -1,8 +1,8 @@
 ﻿using Application;
 using Application.DTO.Request.Auth;
 using Application.DTO.Response.Auth;
+using Application.User.Ports;
 using Domain.Ports;
-using Domain.Ports.DTO.Response;
 using IdentityAuth.Jwt;
 using Microsoft.AspNetCore.Identity;
 namespace IdentityAuth;
@@ -12,18 +12,18 @@ public class IdentityService : IAuthenticationService
     private readonly SignInManager<IdentityUser> _signInManager;
     private readonly UserManager<IdentityUser> _userManager;
     private readonly JwtGenerator _jwtGenerator;
-    private readonly IUserRepository _userRepository;
+    private readonly IUserService _userService;
 
     public IdentityService(
         SignInManager<IdentityUser> signInManager,
         UserManager<IdentityUser> userManager,
         JwtGenerator jwtGenerator,
-        IUserRepository userRepository)
+        IUserService userService)
     {
         _signInManager = signInManager;
         _userManager = userManager;
         _jwtGenerator = jwtGenerator;
-        _userRepository = userRepository;
+        _userService = userService;
     }
 
     public async Task<UserLoginResponseDto> AuthenticateAsync(UserLoginRequestDto request)
@@ -48,7 +48,7 @@ public class IdentityService : IAuthenticationService
         return userAuth;
     }
 
-    public async Task<ICreatedUserDto> RegisterAsync(CreateUserDto register)
+    public async Task<CreatedUserDto> RegisterAsync(CreateUserDto register)
     {
         var identityUser = new IdentityUser
         {
@@ -60,7 +60,7 @@ public class IdentityService : IAuthenticationService
         if (result.Succeeded)
             await _userManager.SetLockoutEnabledAsync(identityUser, false);
 
-        var response = await _userRepository.CreateAsync(register, identityUser.PasswordHash);
+        var response = await _userService.CreateAsync(register, identityUser.PasswordHash);
         return response;
     }
 }

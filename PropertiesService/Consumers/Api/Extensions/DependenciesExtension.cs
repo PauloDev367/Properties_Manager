@@ -1,5 +1,6 @@
 ﻿using Application;
 using Application.User;
+using Application.User.Ports;
 using Domain.Ports;
 using IdentityAuth;
 using IdentityAuth.Jwt;
@@ -15,5 +16,6 @@ public static class DependenciesExtension
         builder.Services.AddScoped<JwtGenerator>();
         builder.Services.AddTransient<IAuthenticationService, IdentityService>();
         builder.Services.AddTransient<IUserRepository, UserRepository>();
+        builder.Services.AddTransient<IUserService, UserService>();
     }
 }
