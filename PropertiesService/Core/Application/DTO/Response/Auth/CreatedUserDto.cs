@@ -1,22 +1,28 @@
 ﻿
+using Application.DTO.Response.User;
+
 namespace Application.DTO.Response.Auth;
 
 public class CreatedUserDto
 {
-    public Guid Id { get; set; }
-    public string Email { get; set; }
-    public string Name { get; set; }
-    public string Nickname { get; set; }
-    public DateTime CreatedAt { get; set; }
+    public BasicUserInfoResponseDto? User { get; set; }
+    public List<string> Errors { get; set; } = new List<string>();
+
     public CreatedUserDto FromUser(Domain.Entities.User user)
     {
         return new CreatedUserDto
         {
-            Email = user.Email,
-            Name = user.Name,
-            Nickname = user.Nickname,
-            Id = user.Id,
-            CreatedAt = user.CreatedAt,
+            User = new BasicUserInfoResponseDto
+            {
+                Email = user.Email,
+                Name = user.Name,
+                Nickname = user.Nickname,
+                Id = user.Id,
+                CreatedAt = user.CreatedAt,
+            }
         };
     }
+    public void AddError(string error) => Errors.Add(error);
+
+    public void SetError(List<string> error) => Errors = error;
 }

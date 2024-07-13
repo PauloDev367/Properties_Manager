@@ -16,4 +16,8 @@ public class CreateUserDto
     [Required]
     [MinLength(3)]
     public string Nickname { get; set; }
+    public override string ToString()
+    {
+        return $"{Name} - {Nickname} - {Email} - {Password}";
+    }
 }

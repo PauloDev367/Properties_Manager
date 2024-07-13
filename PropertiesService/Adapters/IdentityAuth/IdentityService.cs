@@ -57,10 +57,16 @@ public class IdentityService : IAuthenticationService
             EmailConfirmed = true
         };
         var result = await _userManager.CreateAsync(identityUser, register.Password);
+        var response = new CreatedUserDto();
         if (result.Succeeded)
+        {
             await _userManager.SetLockoutEnabledAsync(identityUser, false);
-
-        var response = await _userService.CreateAsync(register, identityUser.PasswordHash);
+            response = await _userService.CreateAsync(register, identityUser.PasswordHash);
+        }
+        else
+        {
+            response.SetError(result.Errors.ToList().Select(r => r.Description).ToList());
+        }
         return response;
     }
 }
