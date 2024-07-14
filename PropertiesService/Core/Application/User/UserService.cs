@@ -59,4 +59,9 @@ public class UserService : IUserService
         }
         return response;
     }
+
+    public async Task DeleteAsync(Guid id)
+    {
+        await _userRepository.DeleteAsync(id);
+    }
 }

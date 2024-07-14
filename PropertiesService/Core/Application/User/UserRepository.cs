@@ -1,4 +1,5 @@
-﻿using DataEF;
+﻿using Application.ApplicationExceptions;
+using DataEF;
 using Domain.Ports;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
@@ -68,5 +69,16 @@ public class UserRepository : IUserRepository
             .AsNoTracking()
             .FirstOrDefaultAsync(x => x.Id == id);
         return user;
+    }
+    public async Task DeleteAsync(Guid id)
+    {
+        var user = await _appDbContext.Users
+            .AsNoTracking()
+            .FirstOrDefaultAsync(x => x.Id == id);
+        
+        if (user == null) throw new UserNotFoundException("User not founded");
+        
+        _appDbContext.Users.Remove(user);
+        await _appDbContext.SaveChangesAsync();
     }
 }

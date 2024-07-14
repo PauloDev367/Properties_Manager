@@ -1,4 +1,5 @@
 ﻿using Application;
+using Application.ApplicationExceptions;
 using Application.DTO.Request.Auth;
 using Application.DTO.Request.User;
 using Application.User.Ports;
@@ -46,5 +47,18 @@ public class UserController : ControllerBase
     {
         var data = await _userService.GetOneAsync(id);
         return Ok(data);
+    }
+    [HttpDelete("id:guid")]
+    public async Task<IActionResult> DeleteAsync(Guid id)
+    {
+        try
+        {
+            await _userService.DeleteAsync(id);
+            return NoContent();
+        }
+        catch (UserNotFoundException e)
+        {
+            return BadRequest(e.Message);
+        }
     }
 }
