@@ -8,4 +8,5 @@ public interface IUserService
 {
     public Task<CreatedUserDto> CreateAsync(CreateUserDto request, string passwordHash);
     public Task<UserPaginationResponseDto> GetAllAsync(GetUserParamsRequestDto request);
+    public Task<BasicUserInfoResponseDto?> GetOneAsync(Guid id);
 }

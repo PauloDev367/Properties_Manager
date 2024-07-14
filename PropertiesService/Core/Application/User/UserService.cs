@@ -48,4 +48,15 @@ public class UserService : IUserService
         };
         return response;
     }
+
+    public async Task<BasicUserInfoResponseDto?> GetOneAsync(Guid id)
+    {
+        var user = await _userRepository.GetOneAsync(id);
+        var response = new BasicUserInfoResponseDto();
+        if (user != null)
+        {
+            response = new BasicUserInfoResponseDto(user);
+        }
+        return response;
+    }
 }

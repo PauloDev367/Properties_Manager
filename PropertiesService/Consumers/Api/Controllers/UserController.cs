@@ -41,4 +41,10 @@ public class UserController : ControllerBase
         var data = await _userService.GetAllAsync(request);
         return Ok(data);
     }
+    [HttpGet("id:guid")]
+    public async Task<IActionResult> GetOneAsync(Guid id)
+    {
+        var data = await _userService.GetOneAsync(id);
+        return Ok(data);
+    }
 }

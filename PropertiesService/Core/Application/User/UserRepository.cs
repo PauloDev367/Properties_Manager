@@ -62,8 +62,11 @@ public class UserRepository : IUserRepository
         return data;
     }
 
-    public Task<Domain.Entities.User> GetOneAsync()
+    public Task<Domain.Entities.User?> GetOneAsync(Guid id)
     {
-        throw new NotImplementedException();
+        var user = _appDbContext.Users
+            .AsNoTracking()
+            .FirstOrDefaultAsync(x => x.Id == id);
+        return user;
     }
 }
