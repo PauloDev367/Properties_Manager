@@ -31,11 +31,5 @@ public class UserController : ControllerBase
         var uri = "api/v1/users/" + data.User.Id;
         return Created(uri, data);
     }
-    [HttpPost("login")]
-    public async Task<IActionResult> LoginAsync([FromBody] UserLoginRequestDto request)
-    {
-        var data = await _authenticationService.AuthenticateAsync(request);
-        _logger.LogInfo($"User token generated: {request.Email}");
-        return Ok(data);
-    }
+   
 }
