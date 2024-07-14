@@ -1,6 +1,7 @@
 ﻿using DataEF;
 using Domain.Ports;
-
+using Microsoft.EntityFrameworkCore;
+using System.Linq.Dynamic.Core;
 
 namespace Application.User;
 
@@ -29,9 +30,23 @@ public class UserRepository : IUserRepository
         return user;
     }
 
-    public Task<List<Domain.Entities.User>> GetAllAsync()
+    public async Task<List<Domain.Entities.User>> GetAllAsync(int perPage, int page, string orderBy, string order)
     {
-        throw new NotImplementedException();
+        IQueryable<Domain.Entities.User> query = _appDbContext.Users;
+        var totalCount = await query.CountAsync();
+        int skipAmount = page * perPage;
+        query = query
+            .OrderBy(orderBy + " " + order)
+            .Skip(skipAmount)
+            .Take(perPage);
+
+        var totalPages = (int)Math.Ceiling((double)totalCount / perPage);
+        var currentPage = page + 1;
+        var nextPage = currentPage < totalPages ? currentPage + 1 : 1;
+        var prevPage = currentPage > 1 ? currentPage - 1 : 1;
+
+        var data = await query.AsNoTracking().ToListAsync();
+        return data;
     }
 
     public Task<Domain.Entities.User> GetOneAsync()

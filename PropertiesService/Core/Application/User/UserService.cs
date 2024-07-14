@@ -1,6 +1,9 @@
 ﻿using Application.DTO.Request.Auth;
+using Application.DTO.Request.User;
 using Application.DTO.Response.Auth;
+using Application.DTO.Response.User;
 using Application.User.Ports;
+using Domain.Entities;
 using Domain.Ports;
 
 namespace Application.User;
@@ -26,5 +29,16 @@ public class UserService : IUserService
 
         var response = await _userRepository.CreateAsync(user);
         return new CreatedUserDto().FromUser(response);
+    }
+
+    public async Task<List<BasicUserInfoResponseDto>> GetAllAsync(GetUserParamsRequestDto request)
+    {
+        string[] orderParams = !string.IsNullOrEmpty(request.OrderBy) ? request.OrderBy.ToString().Split(",") : "id,desc".Split(",");
+        var orderBy = orderParams[0];
+        var order = orderParams[1];
+
+        var data = await _userRepository.GetAllAsync(request.PerPage, request.Page, orderBy, order);
+        var response = data.Select(u => new BasicUserInfoResponseDto(u));
+        return response;
     }
 }
