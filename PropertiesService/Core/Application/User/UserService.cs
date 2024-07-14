@@ -38,7 +38,7 @@ public class UserService : IUserService
         var order = orderParams[1];
 
         var data = await _userRepository.GetAllAsync(request.PerPage, request.Page, orderBy, order);
-        var response = data.Select(u => new BasicUserInfoResponseDto(u));
+        var response = data.Select(u => new BasicUserInfoResponseDto(u)).ToList();
         return response;
     }
 }
