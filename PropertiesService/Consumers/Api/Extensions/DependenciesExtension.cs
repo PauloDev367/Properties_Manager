@@ -1,4 +1,9 @@
-﻿using Application;
+﻿using Api.Services;
+using Application;
+using Application.Image;
+using Application.Image.Ports;
+using Application.Property;
+using Application.Property.Ports;
 using Application.User;
 using Application.User.Ports;
 using Domain.Ports;
@@ -17,5 +22,9 @@ public static class DependenciesExtension
         builder.Services.AddTransient<IAuthenticationService, IdentityService>();
         builder.Services.AddTransient<IUserRepository, UserRepository>();
         builder.Services.AddTransient<IUserService, UserService>();
+        builder.Services.AddTransient<IPropertyRepository, PropertyRepository>();
+        builder.Services.AddTransient<SavePropertyFilesService>();
+        builder.Services.AddTransient<IPropertyService, PropertyService>();
+        builder.Services.AddTransient<IImageRepository, ImageRepository>();
     }
 }

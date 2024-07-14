@@ -1,11 +1,6 @@
 ﻿using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataEF.Configurations;
 
@@ -13,6 +8,8 @@ public class PropertyConfiguration : IEntityTypeConfiguration<Property>
 {
     public void Configure(EntityTypeBuilder<Property> builder)
     {
+        builder.ToTable("Property");
+
         builder.HasKey(x => x.Id);
         builder.Property(x => x.Id)
             .ValueGeneratedOnAdd()
