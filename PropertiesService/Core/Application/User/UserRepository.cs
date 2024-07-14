@@ -1,6 +1,7 @@
 ﻿using DataEF;
 using Domain.Ports;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using System.Linq.Dynamic.Core;
 
 namespace Application.User;
@@ -8,10 +9,12 @@ namespace Application.User;
 public class UserRepository : IUserRepository
 {
     private readonly AppDbContext _appDbContext;
-
-    public UserRepository(AppDbContext appDbContext)
+    private readonly IMemoryCache _cache;
+    private readonly string _userGetCacheBaseKey = "userGetCacheBaseKey";
+    public UserRepository(AppDbContext appDbContext, IMemoryCache cache)
     {
         _appDbContext = appDbContext;
+        _cache = cache;
     }
 
     public async Task<Domain.Entities.User> CreateAsync(Domain.Entities.User register)
@@ -32,20 +35,30 @@ public class UserRepository : IUserRepository
 
     public async Task<List<Domain.Entities.User>> GetAllAsync(int perPage, int page, string orderBy, string order)
     {
-        IQueryable<Domain.Entities.User> query = _appDbContext.Users;
-        var totalCount = await query.CountAsync();
-        int skipAmount = page * perPage;
-        query = query
-            .OrderBy(orderBy + " " + order)
-            .Skip(skipAmount)
-            .Take(perPage);
+        var cacheKey = $"{_userGetCacheBaseKey}{perPage}{page}";
+        if (!_cache.TryGetValue(cacheKey, out List<Domain.Entities.User> data))
+        {
+            IQueryable<Domain.Entities.User> query = _appDbContext.Users;
+            var totalCount = await query.CountAsync();
+            int skipAmount = page * perPage;
+            query = query
+                .OrderBy(orderBy + " " + order)
+                .Skip(skipAmount)
+                .Take(perPage);
 
-        var totalPages = (int)Math.Ceiling((double)totalCount / perPage);
-        var currentPage = page + 1;
-        var nextPage = currentPage < totalPages ? currentPage + 1 : 1;
-        var prevPage = currentPage > 1 ? currentPage - 1 : 1;
+            var totalPages = (int)Math.Ceiling((double)totalCount / perPage);
+            var currentPage = page + 1;
+            var nextPage = currentPage < totalPages ? currentPage + 1 : 1;
+            var prevPage = currentPage > 1 ? currentPage - 1 : 1;
 
-        var data = await query.AsNoTracking().ToListAsync();
+            data = await query.AsNoTracking().ToListAsync();
+            var cacheEntryOptions = new MemoryCacheEntryOptions()
+                .SetSlidingExpiration(TimeSpan.FromSeconds(45))
+                .SetAbsoluteExpiration(TimeSpan.FromSeconds(3600))
+                .SetPriority(CacheItemPriority.Normal);
+            _cache.Set(cacheKey, data, cacheEntryOptions);
+        }
+
         return data;
     }
 
