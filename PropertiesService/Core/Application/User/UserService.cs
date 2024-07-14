@@ -31,14 +31,21 @@ public class UserService : IUserService
         return new CreatedUserDto().FromUser(response);
     }
 
-    public async Task<List<BasicUserInfoResponseDto>> GetAllAsync(GetUserParamsRequestDto request)
+    public async Task<UserPaginationResponseDto> GetAllAsync(GetUserParamsRequestDto request)
     {
         string[] orderParams = !string.IsNullOrEmpty(request.OrderBy) ? request.OrderBy.ToString().Split(",") : "id,desc".Split(",");
         var orderBy = orderParams[0];
         var order = orderParams[1];
 
         var data = await _userRepository.GetAllAsync(request.PerPage, request.Page, orderBy, order);
-        var response = data.Select(u => new BasicUserInfoResponseDto(u)).ToList();
+        var users = data.Select(u => new BasicUserInfoResponseDto(u)).ToList();
+        var response = new UserPaginationResponseDto
+        {
+            Page = request.Page,
+            PerPage = request.PerPage,
+            TotalItems = users.Count,
+            Users = users
+        };
         return response;
     }
 }

@@ -7,5 +7,5 @@ namespace Application.User.Ports;
 public interface IUserService
 {
     public Task<CreatedUserDto> CreateAsync(CreateUserDto request, string passwordHash);
-    public Task<List<BasicUserInfoResponseDto>> GetAllAsync(GetUserParamsRequestDto request);
+    public Task<UserPaginationResponseDto> GetAllAsync(GetUserParamsRequestDto request);
 }
