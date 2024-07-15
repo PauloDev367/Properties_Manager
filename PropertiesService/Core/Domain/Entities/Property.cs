@@ -1,9 +1,5 @@
 ﻿using Domain.ValueObjects;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Text.Json.Serialization;
 
 namespace Domain.Entities;
 
@@ -19,4 +15,8 @@ public class Property
     public List<Image> Images { get; set; }
     public string MainPhoto { get; set; }
     public DateTime CreatedAt { get; private set; } = DateTime.Now;
+    public Property()
+    {
+        Images = new List<Image>();
+    }
 }

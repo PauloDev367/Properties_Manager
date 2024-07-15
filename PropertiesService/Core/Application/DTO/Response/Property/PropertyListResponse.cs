@@ -1,9 +1,8 @@
 ﻿using Domain.ValueObjects;
-using System.Text.Json.Serialization;
 
 namespace Application.DTO.Response.Property;
 
-public class CreatedPropertyResponseDto
+public class PropertyListResponse
 {
     public Guid Id { get; set; }
     public string Title { get; set; }
@@ -14,11 +13,11 @@ public class CreatedPropertyResponseDto
     public int TotalParkings { get; set; }
     public string MainPhoto { get; set; }
     public DateTime CreatedAt { get; private set; } = DateTime.Now;
-    public CreatedPropertyResponseDto()
+    public PropertyListResponse()
     {
 
     }
-    public CreatedPropertyResponseDto(Domain.Entities.Property property)
+    public PropertyListResponse(Domain.Entities.Property property)
     {
         CreatedAt = property.CreatedAt;
         Title = property.Title;

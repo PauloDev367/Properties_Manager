@@ -1,6 +1,7 @@
 ﻿using Api.Services;
 using Api.ViewModels;
 using Application.DTO.Request.Property;
+using Application.DTO.Request.User;
 using Application.Property.Ports;
 using Microsoft.AspNetCore.Mvc;
 
@@ -44,4 +45,11 @@ public class PropertyController : ControllerBase
         var uri = "api/v1/properties/" + created.Id;
         return Created(uri, created);
     }
+    [HttpGet]
+    public async Task<IActionResult> GetAllAsync([FromQuery] GetPropertyParamsRequestDto request)
+    {
+        var data = await _propertyService.GetAllAsync(request);
+        return Ok(data);
+    }
+    
 }

@@ -1,4 +1,5 @@
 ﻿using Application.DTO.Request.Property;
+using Application.DTO.Request.User;
 using Application.DTO.Response.Property;
 using Application.Image.Ports;
 using Application.Property.Ports;
@@ -31,10 +32,27 @@ public class PropertyService : IPropertyService
 
         var created = await _propertyRepository.CreateAsync(property);
 
-        foreach (var p in pictures) {
+        foreach (var p in pictures)
+        {
             await _imageRepository.CreateAsync(p, property.Id);
         }
 
         return new CreatedPropertyResponseDto(created);
+    }
+    public async Task<PropertyPaginationResponseDto> GetAllAsync(GetPropertyParamsRequestDto request)
+    {
+        string[] orderParams = !string.IsNullOrEmpty(request.OrderBy) ? request.OrderBy.ToString().Split(",") : "id,desc".Split(",");
+        var orderBy = orderParams[0];
+        var order = orderParams[1];
+
+        var data = await _propertyRepository.GetAllAsync(request.PerPage, request.Page, orderBy, order);
+        var properties = data.Select(p => new PropertyListResponse(p)).ToList();
+        var response = new PropertyPaginationResponseDto { 
+            Page = request.Page,
+            PerPage = request.PerPage,
+            Properties = properties,
+            TotalItems = properties.Count
+        };
+        return response;
     }
 }
