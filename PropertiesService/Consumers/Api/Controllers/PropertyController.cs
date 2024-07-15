@@ -57,4 +57,10 @@ public class PropertyController : ControllerBase
         await _propertyService.RemoveAsync(id);
         return NoContent();
     }
+    [HttpGet("id:guid")]
+    public async Task<IActionResult> GetOneAsync(Guid id)
+    {
+        var property = await _propertyService.GetOneAsync(id);
+        return Ok(property);
+    }
 }

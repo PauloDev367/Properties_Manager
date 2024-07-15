@@ -9,4 +9,5 @@ public interface IPropertyService
     public Task<CreatedPropertyResponseDto> CreateAsync(CreatePropertyRequestDto request, List<string> pictures);
     public Task<PropertyPaginationResponseDto> GetAllAsync(GetPropertyParamsRequestDto request);
     public Task RemoveAsync(Guid id);
+    public Task<OnePropertyResponseDto> GetOneAsync(Guid id);
 }

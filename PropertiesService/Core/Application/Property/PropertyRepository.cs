@@ -49,7 +49,10 @@ public class PropertyRepository : IPropertyRepository
     }
     public async Task<Domain.Entities.Property?> GetOneAsync(Guid guid)
     {
-        return await _appDbContext.Properties.FirstOrDefaultAsync(x => x.Id == guid);
+        return await _appDbContext.Properties
+            .AsNoTracking()
+            .Include(x => x.Images)
+            .FirstOrDefaultAsync(x => x.Id == guid);
     }
     public async Task DeleteAsync(Domain.Entities.Property property)
     {

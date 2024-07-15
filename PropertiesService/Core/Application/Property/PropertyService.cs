@@ -64,5 +64,11 @@ public class PropertyService : IPropertyService
 
         _propertyRepository.DeleteAsync(property);
     }
+    public async Task<OnePropertyResponseDto> GetOneAsync(Guid id)
+    {
+        var property = await _propertyRepository.GetOneAsync(id);
+        if (property == null) throw new PropertyNotFoundException("Property was not founded");
 
+        return new OnePropertyResponseDto(property);
+    }
 }
