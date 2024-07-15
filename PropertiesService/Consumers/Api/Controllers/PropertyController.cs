@@ -51,5 +51,10 @@ public class PropertyController : ControllerBase
         var data = await _propertyService.GetAllAsync(request);
         return Ok(data);
     }
-    
+    [HttpDelete("id:guid")]
+    public async Task<IActionResult> DeleteAsync(Guid id)
+    {
+        await _propertyService.RemoveAsync(id);
+        return NoContent();
+    }
 }

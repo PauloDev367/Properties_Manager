@@ -45,7 +45,15 @@ public class PropertyRepository : IPropertyRepository
 
         var data = await query.AsNoTracking().ToListAsync();
 
-
         return data;
+    }
+    public async Task<Domain.Entities.Property?> GetOneAsync(Guid guid)
+    {
+        return await _appDbContext.Properties.FirstOrDefaultAsync(x => x.Id == guid);
+    }
+    public async Task DeleteAsync(Domain.Entities.Property property)
+    {
+        _appDbContext.Properties.Remove(property);
+        await _appDbContext.SaveChangesAsync();
     }
 }

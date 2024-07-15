@@ -1,4 +1,5 @@
-﻿using Application.DTO.Request.Property;
+﻿using Application.ApplicationExceptions;
+using Application.DTO.Request.Property;
 using Application.DTO.Request.User;
 using Application.DTO.Response.Property;
 using Application.Image.Ports;
@@ -47,7 +48,8 @@ public class PropertyService : IPropertyService
 
         var data = await _propertyRepository.GetAllAsync(request.PerPage, request.Page, orderBy, order);
         var properties = data.Select(p => new PropertyListResponse(p)).ToList();
-        var response = new PropertyPaginationResponseDto { 
+        var response = new PropertyPaginationResponseDto
+        {
             Page = request.Page,
             PerPage = request.PerPage,
             Properties = properties,
@@ -55,4 +57,12 @@ public class PropertyService : IPropertyService
         };
         return response;
     }
+    public async Task RemoveAsync(Guid id)
+    {
+        var property = await _propertyRepository.GetOneAsync(id);
+        if (property == null) throw new PropertyNotFoundException("Property was not founded");
+
+        _propertyRepository.DeleteAsync(property);
+    }
+
 }
