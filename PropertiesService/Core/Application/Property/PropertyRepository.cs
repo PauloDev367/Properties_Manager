@@ -35,7 +35,8 @@ public class PropertyRepository : IPropertyRepository
         query = query
             .OrderBy(orderBy + " " + order)
             .Skip(skipAmount)
-            .Take(perPage);
+            .Take(perPage)
+            .Include(x => x.Images);
 
         var totalPages = (int)Math.Ceiling((double)totalCount / perPage);
         var currentPage = page + 1;

@@ -1,4 +1,5 @@
-﻿using Domain.ValueObjects;
+﻿using Domain.Entities;
+using Domain.ValueObjects;
 
 namespace Application.DTO.Response.Property;
 
@@ -9,6 +10,7 @@ public class PropertyListResponse
     public string Description { get; set; }
     public Price Price { get; set; }
     public int TotalBath { get; set; }
+    public List<string> Images { get; set; }
     public int TotalKitchen { get; set; }
     public int TotalParkings { get; set; }
     public string MainPhoto { get; set; }
@@ -28,5 +30,6 @@ public class PropertyListResponse
         TotalBath = property.TotalBath;
         TotalKitchen = property.TotalKitchen;
         TotalParkings = property.TotalParkings;
+        Images = property.Images.Select(x => x.Path).ToList();
     }
 }
