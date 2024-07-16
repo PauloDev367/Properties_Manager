@@ -50,13 +50,13 @@ public class PropertyTests
     }
 
     [Test]
-    public async Task ShouldThrowExceptionIfPropertyIsNotFound()
+    public async Task ShouldThrowExceptionIfPropertyIsNotFoundOnGetOne()
     {
         try
         {
             var faker = new Mock<IPropertyRepository>();
             faker.Setup(x => x.GetOneAsync(It.IsAny<Guid>()))
-                .Returns(Task.FromResult((Domain.Entities.Property)null));
+                  .Returns(Task.FromResult((Domain.Entities.Property)null));
 
             var propertyService = new PropertyService(faker.Object, _imageRepository);
             await propertyService.GetOneAsync(Guid.NewGuid());
@@ -66,4 +66,24 @@ public class PropertyTests
             Assert.AreEqual(ex.Message, "Property was not founded");
         }
     }
+
+    [Test]
+    public async Task ShouldThrowExceptionIfPropertyIsNotFoundOnDelete()
+    {
+        try
+        {
+            var faker = new Mock<IPropertyRepository>();
+            faker.Setup(x => x.DeleteAsync(It.IsAny<Domain.Entities.Property>()))
+                .Returns(Task.FromResult((Domain.Entities.Property)null));
+
+            var propertyService = new PropertyService(faker.Object, _imageRepository);
+            await propertyService.RemoveAsync(Guid.NewGuid());
+        }
+        catch (Exception ex)
+        {
+            Assert.AreEqual(ex.Message, "Property was not founded");
+        }
+    }
+
+
 }
