@@ -1,3 +1,4 @@
+using Application.ApplicationExceptions;
 using Application.DTO.Request.Auth;
 using Application.User;
 using Domain.DomainExceptions;
@@ -50,6 +51,25 @@ namespace AplicationTests
             var user = await userService.GetOneAsync(Guid.NewGuid());
 
             Assert.IsNull(user.Id);
+        }
+        [Test]
+        public async Task ShouldThrowAnErrorIfUserIsNotFoundOnDelete()
+        {
+            try
+            {
+                var fakeRepo = new Mock<IUserRepository>();
+                fakeRepo.Setup(x => x.DeleteAsync(It.IsAny<Domain.Entities.User>()))
+                    .Returns(() => { return Task.FromResult((Domain.Entities.User)null); });
+
+                var userService = new UserService(fakeRepo.Object);
+
+                await userService.DeleteAsync(Guid.NewGuid());
+            }
+            catch (Exception ex)
+            {
+                Assert.AreEqual(ex.Message, "User was not founded on database");
+            }
+            
         }
     }
 }

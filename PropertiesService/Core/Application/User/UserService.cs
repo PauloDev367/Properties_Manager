@@ -1,4 +1,5 @@
-﻿using Application.DTO.Request.Auth;
+﻿using Application.ApplicationExceptions;
+using Application.DTO.Request.Auth;
 using Application.DTO.Request.User;
 using Application.DTO.Response.Auth;
 using Application.DTO.Response.User;
@@ -61,6 +62,8 @@ public class UserService : IUserService
 
     public async Task DeleteAsync(Guid id)
     {
-        await _userRepository.DeleteAsync(id);
+        var user = await _userRepository.GetOneAsync(id);
+        if (user == null) throw new UserNotFoundException("User was not founded on database");
+        await _userRepository.DeleteAsync(user);
     }
 }

@@ -70,14 +70,8 @@ public class UserRepository : IUserRepository
             .FirstOrDefaultAsync(x => x.Id == id);
         return user;
     }
-    public async Task DeleteAsync(Guid id)
-    {
-        var user = await _appDbContext.Users
-            .AsNoTracking()
-            .FirstOrDefaultAsync(x => x.Id == id);
-        
-        if (user == null) throw new UserNotFoundException("User not founded");
-        
+    public async Task DeleteAsync(Domain.Entities.User user)
+    {        
         _appDbContext.Users.Remove(user);
         await _appDbContext.SaveChangesAsync();
     }
