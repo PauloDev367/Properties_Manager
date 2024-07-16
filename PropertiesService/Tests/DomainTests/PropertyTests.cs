@@ -12,7 +12,7 @@ public class PropertyTests
     }
 
     [Test]
-    public void ShoulNotCreateNewPropertyIfPriceValueIsLowestThan1000()
+    public void ShoulNotCreateNewPropertyIfPriceValueIsLowestThen1000()
     {
         var exception = Assert.Throws<PropertyPriceNotAllowedException>(() =>
         {
@@ -30,7 +30,7 @@ public class PropertyTests
         Assert.Pass("The value should not be lower than 1000", exception.Message);
     }
     [Test]
-    public void ShoulCreateNewPropertyWithPriceValueIsBiggerThan1000()
+    public void ShoulCreateNewPropertyWithPriceValueIsBiggerThen1000()
     {
         Assert.DoesNotThrow(() =>
         {
