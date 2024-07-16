@@ -1,7 +1,5 @@
-using Application.ApplicationExceptions;
 using Application.DTO.Request.Auth;
 using Application.User;
-using Domain.DomainExceptions;
 using Domain.Ports;
 using Moq;
 
