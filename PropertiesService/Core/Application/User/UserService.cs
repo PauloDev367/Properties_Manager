@@ -3,7 +3,6 @@ using Application.DTO.Request.User;
 using Application.DTO.Response.Auth;
 using Application.DTO.Response.User;
 using Application.User.Ports;
-using Domain.Entities;
 using Domain.Ports;
 
 namespace Application.User;
