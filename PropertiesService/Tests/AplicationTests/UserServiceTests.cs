@@ -13,7 +13,7 @@ namespace AplicationTests
         {
         }
         [Test]
-        public async Task ShoulCreateANewUser()
+        public async Task ShouldCreateANewUser()
         {
             var newUserId = Guid.NewGuid();
             var fakeRepo = new Mock<IUserRepository>();
@@ -72,6 +72,21 @@ namespace AplicationTests
 
             Assert.IsNull(user.Id);
         }
+        [Test]
+        public async Task ShouldReturnUserIsWhenTheyAreFounded()
+        {
+            var userId = Guid.NewGuid();
+            var fakeRepo = new Mock<IUserRepository>();
+            fakeRepo.Setup(x => x.GetOneAsync(It.IsAny<Guid>()))
+                .Returns(() => { return Task.FromResult(new Domain.Entities.User { Id = userId }); });
+
+            var userService = new UserService(fakeRepo.Object);
+            var user = await userService.GetOneAsync(Guid.NewGuid());
+
+            Assert.AreEqual(userId, user.Id);
+        }
+
+
         [Test]
         public async Task ShouldThrowAnErrorIfUserIsNotFoundOnDelete()
         {
