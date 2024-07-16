@@ -9,7 +9,7 @@ public class UserTests
     [TestCase("123A4")]
     [TestCase("123A56")]
     [TestCase("kdJals")]
-    public void ShouldNotCreateANewUserWithAPasswordLessThenEigth(string password)
+    public void ShouldNotCreateANewUserWithAPasswordLessThanEigth(string password)
     {
         var error = Assert.Throws<InvalidPasswordException>(() =>
         {
@@ -43,4 +43,20 @@ public class UserTests
 
         Assert.AreEqual("Password need to have one upper character", error.Message);
     }
+    [Test]
+    public void ShouldNotCreateANewUserWithANameLessThanThreeCharacter()
+    {
+        var error = Assert.Throws<InvalidUserException>(() =>
+        {
+            var user = new Domain.Entities.User
+            {
+                Email = "email@email.com",
+                Password = "Senha123456",
+                Name = "In",
+                Nickname = "N"
+            };
+        });
+        Assert.AreEqual("The user name need to have minimum 3 characteres", error.Message);
+    }
+
 }
