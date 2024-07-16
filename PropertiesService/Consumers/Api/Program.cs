@@ -5,23 +5,19 @@ using NLog;
 var builder = WebApplication.CreateBuilder(args);
 LogManager.LoadConfiguration("nlog.config");
 
-// Add services to the container.
-
 builder.Services.AddControllers();
 
 builder.ConfigureAppDbContext();
 builder.LoadDependencies();
 builder.ConfigureAppAuth();
 
-
-
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 app.UseStaticFiles();
+app.ConfigureGlobalExceptionHandler();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
