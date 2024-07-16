@@ -12,6 +12,27 @@ namespace AplicationTests
         public void Setup()
         {
         }
+        [Test]
+        public async Task ShoulCreateANewUser()
+        {
+            var newUserId = Guid.NewGuid();
+            var fakeRepo = new Mock<IUserRepository>();
+            var userService = new UserService(fakeRepo.Object);
+
+            fakeRepo.Setup(x => x.CreateAsync(It.IsAny<Domain.Entities.User>()))
+                .Returns(Task.FromResult(new Domain.Entities.User { Id = newUserId }));
+
+            var dto = new CreateUserDto
+            {
+                Email = "email@email.com",
+                Password = "HashSena@skdj2123",
+                Name = "Name",
+                Nickname = "N"
+            };
+
+            var created = await userService.CreateAsync(dto, "hash");
+            Assert.AreEqual(created.User.Id, newUserId);
+        }
 
         [Test]
         public async Task ShouldNotCreateANewUserWithWrongName()
