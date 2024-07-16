@@ -39,5 +39,17 @@ namespace AplicationTests
                 Assert.AreEqual("The user name need to have minimum 3 characteres", ex.Message);
             }
         }
+        [Test]
+        public async Task ShouldReturnNullIfUserIsNotFound()
+        {
+            var fakeRepo = new Mock<IUserRepository>();
+            fakeRepo.Setup(x => x.GetOneAsync(It.IsAny<Guid>()))
+                .Returns(() => { return Task.FromResult((Domain.Entities.User)null); });
+
+            var userService = new UserService(fakeRepo.Object);
+            var user = await userService.GetOneAsync(Guid.NewGuid());
+
+            Assert.IsNull(user.Id);
+        }
     }
 }
