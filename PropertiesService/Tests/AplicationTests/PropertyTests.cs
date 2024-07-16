@@ -49,8 +49,6 @@ public class PropertyTests
         Assert.AreEqual(createdProperty.Id, result.Id);
     }
 
-
-
     [Test]
     public async Task ShouldNotCreateANewPropertyIfPriceIsLessThan1000()
     {
@@ -106,6 +104,19 @@ public class PropertyTests
     }
 
     [Test]
+    public async Task ShouldReturnThePropertyIfPropertyIsFounded()
+    {
+        var propertyId = Guid.NewGuid();
+        var faker = new Mock<IPropertyRepository>();
+        faker.Setup(x => x.GetOneAsync(It.IsAny<Guid>()))
+              .Returns(Task.FromResult(new Domain.Entities.Property { Id = propertyId }));
+
+        var propertyService = new PropertyService(faker.Object, _imageRepository);
+        var property = await propertyService.GetOneAsync(Guid.NewGuid());
+        Assert.AreEqual(property.Id, propertyId);
+    }
+
+    [Test]
     public async Task ShouldThrowExceptionIfPropertyIsNotFoundOnDelete()
     {
         try
@@ -122,6 +133,4 @@ public class PropertyTests
             Assert.AreEqual(ex.Message, "Property was not founded");
         }
     }
-
-
 }
