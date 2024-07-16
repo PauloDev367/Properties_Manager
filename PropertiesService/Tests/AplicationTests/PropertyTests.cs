@@ -49,6 +49,44 @@ public class PropertyTests
         Assert.AreEqual(createdProperty.Id, result.Id);
     }
 
+
+
+    [Test]
+    public async Task ShouldNotCreateANewPropertyIfPriceIsLessThan1000()
+    {
+        try
+        {
+            var request = new CreatePropertyRequestDto
+            {
+                Description = "Test description",
+                MainPhoto = "mainphoto.jpg",
+                Price = new Domain.ValueObjects.Price { TypePropertyPayment = 1, Value = 200.00 },
+                Title = "Test Title",
+                TotalBath = 2,
+                TotalKitchen = 1,
+                TotalParkings = 1
+            };
+
+            var pictures = new List<string> { "photo1.jpg", "photo2.jpg" };
+            var createdGuid = Guid.NewGuid();
+            var createdProperty = new Domain.Entities.Property { Id = createdGuid };
+
+            var mockPropertyRepository = new Mock<IPropertyRepository>();
+            var mockImageRepository = new Mock<IImageRepository>();
+
+            mockPropertyRepository.Setup(repo => repo.CreateAsync(It.IsAny<Domain.Entities.Property>()))
+                                   .ReturnsAsync(createdProperty);
+
+            var propertyService = new PropertyService(mockPropertyRepository.Object, mockImageRepository.Object);
+            await propertyService.CreateAsync(request, pictures);
+        }
+        catch (Exception ex)
+        {
+            Assert.AreEqual(ex.Message, "The value should not be lower than 1000");
+        }
+
+    }
+
     [Test]
     public async Task ShouldThrowExceptionIfPropertyIsNotFoundOnGetOne()
     {
