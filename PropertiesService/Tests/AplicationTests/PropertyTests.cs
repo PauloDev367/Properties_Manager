@@ -133,4 +133,20 @@ public class PropertyTests
             Assert.AreEqual(ex.Message, "Property was not founded");
         }
     }
+
+    [Test]
+    public async Task ShouldDeleteIfPropertyIsFoundedOnDelete()
+    {
+        var propertyId = Guid.NewGuid();
+        var faker = new Mock<IPropertyRepository>();
+        faker.Setup(x => x.GetOneAsync(It.IsAny<Guid>()))
+           .Returns(Task.FromResult(new Domain.Entities.Property { Id = propertyId }));
+        faker.Setup(x => x.DeleteAsync(It.IsAny<Domain.Entities.Property>()))
+            .Returns(Task.FromResult(new Domain.Entities.Property { Id = propertyId }));
+
+        var propertyService = new PropertyService(faker.Object, _imageRepository);
+        await propertyService.RemoveAsync(Guid.NewGuid());
+
+        faker.Verify(repo => repo.DeleteAsync(It.IsAny<Domain.Entities.Property>()), Times.Once);
+    }
 }
