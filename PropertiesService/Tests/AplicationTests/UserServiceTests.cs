@@ -1,4 +1,5 @@
 using Application.DTO.Request.Auth;
+using Application.DTO.Request.Property;
 using Application.User;
 using Domain.Ports;
 using Moq;
@@ -67,7 +68,7 @@ namespace AplicationTests
             {
                 Assert.AreEqual(ex.Message, "User was not founded on database");
             }
-            
+
         }
     }
 }
