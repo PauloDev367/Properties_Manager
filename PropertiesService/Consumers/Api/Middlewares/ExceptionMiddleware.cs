@@ -1,4 +1,6 @@
 ﻿using Api.ViewModels;
+using Application.ApplicationExceptions;
+using Domain.DomainExceptions;
 
 namespace Api.Middlewares;
 
@@ -22,6 +24,24 @@ public class ExceptionMiddleware
         {
             await _next(httpContext);
         }
+        catch (PropertyPriceNotAllowedException ex)
+        {
+            errorDetail.Message = ex.Message;
+            errorDetail.StatusCode = 400;
+            await WriteHttpResponseAsync(errorDetail, httpContext);
+        }
+        catch (PropertyNotFoundException ex)
+        {
+            errorDetail.Message = ex.Message;
+            errorDetail.StatusCode = 404;
+            await WriteHttpResponseAsync(errorDetail, httpContext);
+        }
+        catch (UserNotFoundException ex)
+        {
+            errorDetail.Message = ex.Message;
+            errorDetail.StatusCode = 404;
+            await WriteHttpResponseAsync(errorDetail, httpContext);
+        }   
         catch (Exception)
         {
             await WriteHttpResponseAsync(errorDetail, httpContext);
