@@ -4,6 +4,7 @@ using Application.DTO.Request.Auth;
 using Application.DTO.Request.User;
 using Application.User.Ports;
 using Domain.Ports;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers;

@@ -13,7 +13,7 @@ builder.ConfigureAppAuth();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
+builder.ConfigureSwagger();
 var app = builder.Build();
 app.UseStaticFiles();
 app.ConfigureGlobalExceptionHandler();
