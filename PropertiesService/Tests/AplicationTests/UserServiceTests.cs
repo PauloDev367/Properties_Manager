@@ -1,6 +1,7 @@
 using Application.DTO.Request.Auth;
 using Application.DTO.Request.Property;
 using Application.User;
+using Domain.Entities;
 using Domain.Ports;
 using Moq;
 
@@ -73,7 +74,7 @@ namespace AplicationTests
             Assert.IsNull(user.Id);
         }
         [Test]
-        public async Task ShouldReturnUserIsWhenTheyAreFounded()
+        public async Task ShouldReturnUserWhenTheyAreFounded()
         {
             var userId = Guid.NewGuid();
             var fakeRepo = new Mock<IUserRepository>();
@@ -85,8 +86,6 @@ namespace AplicationTests
 
             Assert.AreEqual(userId, user.Id);
         }
-
-
         [Test]
         public async Task ShouldThrowAnErrorIfUserIsNotFoundOnDelete()
         {
@@ -104,7 +103,22 @@ namespace AplicationTests
             {
                 Assert.AreEqual(ex.Message, "User was not founded on database");
             }
+        }
+        [Test]
+        public async Task ShouldDeleteUserIfTheyAreFound()
+        {
+            var userId = Guid.NewGuid();
+            var fakeRepo = new Mock<IUserRepository>();
+            fakeRepo.Setup(x => x.GetOneAsync(It.IsAny<Guid>()))
+                .Returns(() => { return Task.FromResult(new Domain.Entities.User { Id = userId }); });
+            fakeRepo.Setup(repo => repo.DeleteAsync(It.IsAny<Domain.Entities.User>()))
+                .Returns(() => { return Task.FromResult((object)null); });
 
+            var userService = new UserService(fakeRepo.Object);
+
+            await userService.DeleteAsync(Guid.NewGuid());
+
+            fakeRepo.Verify(repo => repo.DeleteAsync(It.IsAny<Domain.Entities.User>()), Times.Once);
         }
     }
 }
