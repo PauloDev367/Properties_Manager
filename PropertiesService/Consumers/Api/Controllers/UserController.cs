@@ -10,6 +10,7 @@ namespace Api.Controllers;
 
 [ApiController]
 [Route("api/v1/users")]
+[Authorize]
 public class UserController : ControllerBase
 {
     private readonly IAuthenticationService _authenticationService;

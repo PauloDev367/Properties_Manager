@@ -3,12 +3,14 @@ using Api.ViewModels;
 using Application.DTO.Request.Property;
 using Application.DTO.Request.User;
 using Application.Property.Ports;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers;
 
 [ApiController]
 [Route("api/v1/properties")]
+[Authorize]
 public class PropertyController : ControllerBase
 {
     private readonly IPropertyService _propertyService;
