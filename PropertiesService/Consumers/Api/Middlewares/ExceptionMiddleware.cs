@@ -24,6 +24,12 @@ public class ExceptionMiddleware
         {
             await _next(httpContext);
         }
+        catch (InvalidUserException ex)
+        {
+            errorDetail.Message = ex.Message;
+            errorDetail.StatusCode = 400;
+            await WriteHttpResponseAsync(errorDetail, httpContext);
+        }
         catch (PropertyPriceNotAllowedException ex)
         {
             errorDetail.Message = ex.Message;
@@ -41,7 +47,7 @@ public class ExceptionMiddleware
             errorDetail.Message = ex.Message;
             errorDetail.StatusCode = 404;
             await WriteHttpResponseAsync(errorDetail, httpContext);
-        }   
+        }
         catch (Exception)
         {
             await WriteHttpResponseAsync(errorDetail, httpContext);
